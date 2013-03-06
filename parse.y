@@ -9,7 +9,7 @@ int set_count=0;
 %}
 
 %token  NUMBER  
-%token  UNION NOT MINUS INTERSECTION OPARAN EPARAN UNIVERSE
+%token  UNION NOT MINUS INTERSECTION OPARAN EPARAN UNIVERSE EMPTY
 
 %right MINUS
 %left UNION 
@@ -28,138 +28,138 @@ SETS: OPARAN SETS EPARAN	  		{
 									}
 
 	| NOT SETS 						{	//Printing the first set
-										printf("\nNOT {");
+										printf("\nNOT { ");
 										i=1;
 										while(i<=20){
 											if(set[$2][i]==1)
-												printf("%d,",i);
+												printf("%d ",i);
 											++i;	
 										}
-										printf("\b} = ");
+										printf("} = ");
 
 										i=1;
-										printf("{");
+										printf("{ ");
 										while(i<=20){
 											if(set[$2][i]==1)
 												set[$2][i]=0;
 											else{
 												set[$2][i]=1;
-												printf("%d,",i);
+												printf("%d ",i);
 											}
 											++i;
 										}
-										printf("\b}");
+										printf("}");
 										$$=$2;
 									}
 
 	| SETS UNION SETS 				{
 										//Printing the first set
-										printf("\n{");
+										printf("\n{ ");
 										i=1;
 										while(i<=20){
 											if(set[$1][i]==1)
-												printf("%d,",i);
+												printf("%d ",i);
 											++i;
 										}
-										printf("\b} ");
+										printf("} ");
 
 										printf("UNION ");
 										
 										//Printing the second set
-										printf("{");
+										printf("{ ");
 										i=1;
 										while(i<=20){
 											if(set[$3][i]==1)
-												printf("%d,",i);
+												printf("%d ",i);
 											++i;	
 										}
-										printf("\b} = ");
+										printf("} = ");
 										
 										i=1;
-										printf("{");
+										printf("{ ");
 										while(i<=20){
 											if(set[$1][i]==1)
-												printf("%d,",i);
+												printf("%d ",i);
 											else if(set[$3][i]==1){
 												set[$1][i]=1;
-												printf("%d,",i);
+												printf("%d ",i);
 											}
 											++i;
 										}
-										printf("\b}");
+										printf("}");
 										$$=$1;
 									}
 
 	| SETS INTERSECTION SETS		{
 										//Printing the first set
-										printf("\n{");
+										printf("\n{ ");
 										i=1;
 										while(i<=20){
 											if(set[$1][i]==1)
-												printf("%d,",i);
+												printf("%d ",i);
 											++i;	
 										}
-										printf("\b} ");
+										printf("} ");
 
 										printf("INTERSECTION ");
 										
 										//Printing the second set
-										printf("{");
+										printf("{ ");
 										i=1;
 										while(i<=20){
 											if(set[$3][i]==1)
-												printf("%d,",i);
+												printf("%d ",i);
 											++i;	
 										}
-										printf("\b} = ");
+										printf("} = ");
 
 										i=1;
-										printf("{");
+										printf("{ ");
 										while(i<=20){
 											if(set[$1][i]==1 & set[$3][i]==1){
 												set[$1][i]=1;
-												printf("%d,",i);
+												printf("%d ",i);
 											}
 											else
 												set[$1][i]=0;
 											++i;
 										}
-										printf("\b}");
+										printf("}");
 										$$=$1;
 									}
-									| SETS MINUS SETS 				{
+	| SETS MINUS SETS 				{
 										//Printing the first set
-										printf("\n{");
+										printf("\n{ ");
 										i=1;
 										while(i<=20){
 											if(set[$1][i]==1)
-												printf("%d,",i);
+												printf("%d ",i);
 											++i;	
 										}
-										printf("\b} ");
+										printf("} ");
 
 										printf("MINUS ");
 										
 										//Printing the second set
-										printf("{");
+										printf("{ ");
 										i=1;
 										while(i<=20){
 											if(set[$3][i]==1)
-												printf("%d,",i);
+												printf("%d ",i);
 											++i;	
 										}
-										printf("\b} = ");
+										printf("} = ");
 										
 										i=1;
-										printf("{");
+										printf("{ ");
 										while(i<=20){
 											if(set[$3][i]==1)
 												set[$1][i]=0;
 											if(set[$1][i]==1)
-												printf("%d,",i);
+												printf("%d ",i);
 											++i;
 										}
-										printf("\b}");
+										printf("}");
 										$$=$1;
 									}
 	; 
@@ -168,6 +168,16 @@ SET:UNIVERSE						{
 										i=1;
 										while(i<=20){
 											set[set_count][i]=1;
+											++i;	
+										}
+										$$=set_count;
+										++set_count;
+									}
+
+	| EMPTY							{
+										i=1;
+										while(i<=20){
+											set[set_count][i]=0;
 											++i;	
 										}
 										$$=set_count;

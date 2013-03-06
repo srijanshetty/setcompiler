@@ -7,6 +7,8 @@
 
 [" "\t]			{}
 
+"O"				{return EMPTY;}
+
 "U"				{return UNIVERSE;}
 
 "("				{return OPARAN;}
