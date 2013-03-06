@@ -8,21 +8,26 @@ int i;
 int set_count=0;
 %}
 
-
-%token  NUMBER
-%token  UNION NOT MINUS INTERSECTION
+%token  NUMBER  
+%token  UNION NOT MINUS INTERSECTION OPARAN EPARAN UNIVERSE
 
 %right MINUS
 %left UNION 
 %left INTERSECTION
 %left NOT
+%left OPARAN EPARAN
 
 %%
-SETS: SET	  						{
+
+SETS: OPARAN SETS EPARAN	  		{
+										$$=$2;
+									}
+
+	| SET 							{
 										$$=$1;
 									}
 
-	| NOT SET 						{	//Printing the first set
+	| NOT SETS 						{	//Printing the first set
 										printf("\nNOT {");
 										i=1;
 										while(i<=20){
@@ -157,11 +162,19 @@ SETS: SET	  						{
 										printf("\b}");
 										$$=$1;
 									}
-
-	
 	; 
 
-SET: '{' NUMBER 					{
+SET:UNIVERSE						{
+										i=1;
+										while(i<=20){
+											set[set_count][i]=1;
+											++i;	
+										}
+										$$=set_count;
+										++set_count;
+									}
+
+	| '{' NUMBER 					{
 										set[set_count][$2]=1;
 										$$=set_count;
 									}

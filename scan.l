@@ -7,6 +7,12 @@
 
 [" "\t]			{}
 
+"U"				{return UNIVERSE;}
+
+"("				{return OPARAN;}
+
+")"				{return EPARAN;}
+
 [0-9]+ 			{
 					if(strlen(yytext) > 1)
 						yylval= 10*(yytext[0]-'0') + yytext[1]-'0'; 
@@ -23,11 +29,8 @@
 
 "not" 			{return NOT;}
 
-[\n] 			{return EOF;}
-
 [^a-z0-9\b]    	{
              		character = yytext[0];
                  	return character;
                	}
-
 %%
